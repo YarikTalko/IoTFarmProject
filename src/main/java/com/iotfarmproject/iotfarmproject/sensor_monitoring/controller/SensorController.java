@@ -15,27 +15,9 @@ public class SensorController {
         this.sensorService = sensorService;
     }
 
-    //http://localhost:8080/api/sensors/publish?message=hello%20world
-    @GetMapping("/publish")
-    public ResponseEntity<String> sendMessage(@RequestParam("message") String message) {
-        sensorService.SendMessage(message);
-        return ResponseEntity.ok("Message sent to RabbitMQ...");
+    @PostMapping("/publish")
+    public ResponseEntity<String> sendJsonMessage(@RequestBody SensorData sensorData) {
+        sensorService.SendJsonMessage(sensorData);
+        return ResponseEntity.ok("Json message sent to RabbitMQ...");
     }
-
 }
-
-//@RestController
-//@RequestMapping("/api/sensors")
-//public class SensorController {
-//    private final SensorService sensorService;
-//
-//    public SensorController(SensorService sensorService) {
-//        this.sensorService = sensorService;
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<String> addSensorData(@RequestBody SensorData data) {
-//        sensorService.saveSensorData(data);
-//        return ResponseEntity.ok("Sensor data saved.");
-//    }
-//}

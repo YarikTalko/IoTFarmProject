@@ -1,10 +1,10 @@
 package com.iotfarmproject.iotfarmproject.sensor_monitoring.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.Instant;
 
+@Data
 public class SensorData {
     private String sensorId;
     private double temperature;
@@ -26,6 +26,4 @@ public class SensorData {
     public Instant getTimestamp() {
         return timestamp;
     }
-
-    // Гетери та сетери
 }

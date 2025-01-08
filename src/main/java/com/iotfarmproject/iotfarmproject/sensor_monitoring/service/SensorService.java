@@ -1,5 +1,6 @@
 package com.iotfarmproject.iotfarmproject.sensor_monitoring.service;
 
+import com.iotfarmproject.iotfarmproject.sensor_monitoring.model.SensorData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,11 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 @Service
 public class SensorService {
 
-    @Value("${rabbitmq.sensors_exchange.name}")
+    @Value("${rabbitmq.sensors.exchange.name}")
     private String exchange;
 
-    @Value("${rabbitmq.sensors_routing.key}")
+    //    @Value("${rabbitmq.sensors.routing_key}")
+    @Value("${rabbitmq.sensors.json.routing_key}")
     private String routingKey;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SensorService.class);
@@ -25,9 +27,11 @@ public class SensorService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void SendMessage(String message) {
-        LOGGER.info(String.format("Message sent -> %s", message));
-        rabbitTemplate.convertAndSend(exchange, routingKey, message);
+    public void SendJsonMessage(SensorData sensorData) {
+        LOGGER.info(String.format("Json message sent -> %s; %.2f; %.2f; %s.",
+                sensorData.getSensorId(), sensorData.getTemperature(),
+                sensorData.getHumidity(), sensorData.getTimestamp().toString()));
+        rabbitTemplate.convertAndSend(exchange, routingKey, sensorData);
     }
 
 //    private final InfluxDBClient influxDBClient;

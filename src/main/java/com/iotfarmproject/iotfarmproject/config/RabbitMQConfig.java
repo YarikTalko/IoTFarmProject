@@ -1,27 +1,28 @@
 package com.iotfarmproject.iotfarmproject.config;
 
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    @Value("${rabbitmq.sensors_queue.name}")
-    private String queue;
 
-    @Value("${rabbitmq.sensors_exchange.name}")
+    @Value("${rabbitmq.sensors.queue.json.name}")
+    private String jsonQueue;
+
+    @Value("${rabbitmq.sensors.exchange.name}")
     private String exchange;
 
-    @Value("${rabbitmq.sensors_routing.key}")
-    private String routingKey;
+    @Value("${rabbitmq.sensors.json.routing_key}")
+    private String routingJsonKey;
 
     @Bean
-    public Queue sensorDataQueue() {
-        return new Queue(queue);
+    public Queue sensorDataJsonQueue() {
+        return new Queue(jsonQueue);
     }
 
     @Bean
@@ -30,27 +31,22 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Binding binding() {
+    public Binding jsonBinding() {
         return BindingBuilder
-                .bind(sensorDataQueue())
+                .bind(sensorDataJsonQueue())
                 .to(exchange())
-                .with(routingKey);
+                .with(routingJsonKey);
     }
 
-    //    private final Queue queue;
+    @Bean
+    public Jackson2JsonMessageConverter converter() {
+        return new Jackson2JsonMessageConverter();
+    }
 
-//    public RabbitMQConfig(Queue queue) {
-//        this.queue = queue;
-//    }
-
-    //----------------------------
-//    @Bean
-//    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-//        return new RabbitTemplate(connectionFactory);
-//    }
-//
-//    @Bean
-//    public Queue irrigationQueue() {
-//        return new Queue("irrigation_control_queue", true);
-//    }
+    @Bean
+    public AmqpTemplate amqpTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(converter());
+        return rabbitTemplate;
+    }
 }
