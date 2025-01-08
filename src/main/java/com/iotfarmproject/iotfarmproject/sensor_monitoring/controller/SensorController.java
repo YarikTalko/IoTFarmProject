@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/sensors")
 public class SensorController {
 
-    private SensorService sensorService;
+    private final SensorService sensorService;
 
     public SensorController(SensorService sensorService) {
         this.sensorService = sensorService;
@@ -18,6 +18,7 @@ public class SensorController {
     @PostMapping("/publish")
     public ResponseEntity<String> sendJsonMessage(@RequestBody SensorData sensorData) {
         sensorService.SendJsonMessage(sensorData);
+        sensorService.SendDataToInfluxDB(sensorData);
         return ResponseEntity.ok("Json message sent to RabbitMQ...");
     }
 }
