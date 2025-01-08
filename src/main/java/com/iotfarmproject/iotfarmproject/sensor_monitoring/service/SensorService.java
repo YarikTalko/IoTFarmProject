@@ -22,14 +22,12 @@ public class SensorService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SensorService.class);
 
-    private RabbitTemplate rabbitTemplate;
-    private InfluxDBClient influxDBClient;
+    private final RabbitTemplate rabbitTemplate;
     private final WriteApiBlocking writeApi;
 
     @Autowired
     public SensorService(RabbitTemplate rabbitTemplate, InfluxDBClient influxDBClient) {
         this.rabbitTemplate = rabbitTemplate;
-        this.influxDBClient = influxDBClient;
         this.writeApi = influxDBClient.getWriteApiBlocking();
     }
 
