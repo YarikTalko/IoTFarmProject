@@ -5,20 +5,18 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    @Value("${rabbitmq.queue.name}")
+    @Value("${rabbitmq.sensors_queue.name}")
     private String queue;
 
-    @Value("${rabbitmq.exchange.name}")
+    @Value("${rabbitmq.sensors_exchange.name}")
     private String exchange;
 
-    @Value("${rabbitmq.routing.key}")
+    @Value("${rabbitmq.sensors_routing.key}")
     private String routingKey;
 
     @Bean

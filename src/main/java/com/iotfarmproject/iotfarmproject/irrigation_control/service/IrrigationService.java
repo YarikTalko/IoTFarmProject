@@ -10,7 +10,7 @@ public class IrrigationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IrrigationService.class);
 
-    @RabbitListener(queues = {"${rabbitmq.queue.name}"})
+    @RabbitListener(queues = {"${rabbitmq.sensors_queue.name}"})
     public void consume(String message) {
         LOGGER.info("Received message -> {}", message);
     }

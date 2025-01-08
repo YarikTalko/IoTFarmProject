@@ -4,20 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import com.iotfarmproject.iotfarmproject.sensor_monitoring.model.SensorData;
-import com.influxdb.client.InfluxDBClient;
-import com.influxdb.client.domain.WritePrecision;
-import com.influxdb.client.write.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 @Service
 public class SensorService {
 
-    @Value("${rabbitmq.exchange.name}")
+    @Value("${rabbitmq.sensors_exchange.name}")
     private String exchange;
 
-    @Value("${rabbitmq.routing.key}")
+    @Value("${rabbitmq.sensors_routing.key}")
     private String routingKey;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SensorService.class);
