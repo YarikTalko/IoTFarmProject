@@ -1,6 +1,7 @@
 package com.iotfarmproject.iotfarmproject.sensor_monitoring.service;
 
 import com.influxdb.client.InfluxDBClient;
+import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
 import com.influxdb.client.WriteApiBlocking;
 import com.iotfarmproject.iotfarmproject.sensor_monitoring.model.SensorData;
@@ -10,6 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class SensorService {
@@ -43,7 +49,10 @@ public class SensorService {
                 .addTag("sensor_id", sensorData.getSensorId())
                 .addField("temperature", sensorData.getTemperature())
                 .addField("humidity", sensorData.getHumidity())
-                .addField("timestamp", sensorData.getTimestamp().toString());
+                .time(sensorData.getTimestamp()
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()
+                        .truncatedTo(ChronoUnit.SECONDS), WritePrecision.S);
         writeApi.writePoint(point);
     }
 }
