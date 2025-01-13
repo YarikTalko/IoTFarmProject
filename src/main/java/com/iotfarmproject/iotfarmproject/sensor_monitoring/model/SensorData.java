@@ -1,7 +1,6 @@
 package com.iotfarmproject.iotfarmproject.sensor_monitoring.model;
 
 import lombok.Data;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
