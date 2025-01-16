@@ -1,10 +1,10 @@
-package com.iotfarmproject.iotfarmproject.sensor_monitoring.service;
+package com.iotfarmproject.iotfarmproject.irrigation_control.service;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
 import com.influxdb.client.WriteApiBlocking;
-import com.iotfarmproject.iotfarmproject.sensor_monitoring.model.SensorData;
+import com.iotfarmproject.iotfarmproject.irrigation_control.model.IrrigationSensorData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
 @Service
-public class SensorService {
+public class IrrigationSensorService {
 
     @Value("${rabbitmq.sensors.exchange.name}")
     private String exchange;
@@ -24,30 +24,30 @@ public class SensorService {
     @Value("${rabbitmq.sensors.json.routing_key}")
     private String routingKey;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SensorService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IrrigationSensorService.class);
 
     private final RabbitTemplate rabbitTemplate;
     private final WriteApiBlocking writeApi;
 
     @Autowired
-    public SensorService(RabbitTemplate rabbitTemplate, InfluxDBClient influxDBClient) {
+    public IrrigationSensorService(RabbitTemplate rabbitTemplate, InfluxDBClient influxDBClient) {
         this.rabbitTemplate = rabbitTemplate;
         this.writeApi = influxDBClient.getWriteApiBlocking();
     }
 
-    public void SendJsonMessage(SensorData sensorData) {
+    public void SendJsonMessage(IrrigationSensorData irrigationSensorData) {
         LOGGER.info(String.format("Json message sent -> %s; %.2f; %.2f; %s.",
-                sensorData.getSensorId(), sensorData.getTemperature(),
-                sensorData.getHumidity(), sensorData.getTimestamp().toString()));
-        rabbitTemplate.convertAndSend(exchange, routingKey, sensorData);
+                irrigationSensorData.getSensorId(), irrigationSensorData.getTemperature(),
+                irrigationSensorData.getHumidity(), irrigationSensorData.getTimestamp().toString()));
+        rabbitTemplate.convertAndSend(exchange, routingKey, irrigationSensorData);
     }
 
-    public void SendDataToInfluxDB(SensorData sensorData) {
+    public void SendDataToInfluxDB(IrrigationSensorData irrigationSensorData) {
         Point point = Point.measurement("sensors_data")
-                .addTag("sensor_id", sensorData.getSensorId())
-                .addField("temperature", sensorData.getTemperature())
-                .addField("humidity", sensorData.getHumidity())
-                .time(sensorData.getTimestamp()
+                .addTag("sensor_id", irrigationSensorData.getSensorId())
+                .addField("temperature", irrigationSensorData.getTemperature())
+                .addField("humidity", irrigationSensorData.getHumidity())
+                .time(irrigationSensorData.getTimestamp()
                         .atZone(ZoneId.systemDefault())
                         .toInstant()
                         .truncatedTo(ChronoUnit.SECONDS), WritePrecision.S);

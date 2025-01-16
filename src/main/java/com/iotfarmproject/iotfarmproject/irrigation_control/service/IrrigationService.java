@@ -1,6 +1,6 @@
 package com.iotfarmproject.iotfarmproject.irrigation_control.service;
 
-import com.iotfarmproject.iotfarmproject.sensor_monitoring.model.SensorData;
+import com.iotfarmproject.iotfarmproject.irrigation_control.model.IrrigationSensorData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -12,10 +12,10 @@ public class IrrigationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(IrrigationService.class);
 
     @RabbitListener(queues = "${rabbitmq.sensors.queue.json.name}")
-    public void consumeJsonMessage(SensorData sensorData) {
+    public void consumeJsonMessage(IrrigationSensorData irrigationSensorData) {
         LOGGER.info(String.format("Received JSON Message (RL) -> %s; %.2f; %.2f; %s.",
-                sensorData.getSensorId(), sensorData.getTemperature(),
-                sensorData.getHumidity(), sensorData.getTimestamp().toString()));
+                irrigationSensorData.getSensorId(), irrigationSensorData.getTemperature(),
+                irrigationSensorData.getHumidity(), irrigationSensorData.getTimestamp().toString()));
     }
 
 //    @RabbitListener(queues = "sensor_data_queue")

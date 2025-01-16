@@ -1,11 +1,11 @@
-package com.iotfarmproject.iotfarmproject.sensor_monitoring.model;
+package com.iotfarmproject.iotfarmproject.irrigation_control.model;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class SensorData {
+public class IrrigationSensorData {
     private String sensorId;
     private double temperature;
     private double humidity;
