@@ -1,7 +1,12 @@
 package com.iotfarmproject.iotfarmproject.equipment_management.service;
 
+import com.iotfarmproject.iotfarmproject.equipment_management.model.EquipmentSensorData;
+import lombok.Getter;
+import org.springframework.stereotype.Service;
+
 import java.sql.*;
 
+@Service
 public class EquipmentService {
 
     public Connection connect() {
@@ -20,11 +25,11 @@ public class EquipmentService {
     }
 
     public void createTables(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
+        Statement stmt;
 
         try {
             String query1 = String.format("CREATE TABLE IF NOT EXISTS " + "equipment_sensor_data" + " (" +
-                    "id SERIAL PRIMARY KEY," +
+                    "id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY," +
                     "equipment_id VARCHAR(50) NOT NULL," +
                     "sensor_type VARCHAR(50) NOT NULL," +
                     "value NUMERIC(10, 2) NOT NULL," +
@@ -34,7 +39,7 @@ public class EquipmentService {
                     "created_at TIMESTAMP DEFAULT NOW())");
 
             String query2 = String.format("CREATE TABLE IF NOT EXISTS " + "equipment_tasks" + " (" +
-                    "id SERIAL PRIMARY KEY," +
+                    "id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY," +
                     "equipment_id VARCHAR(50) NOT NULL," +
                     "fault_code VARCHAR(50)," +
                     "fault_description TEXT," +
@@ -54,26 +59,30 @@ public class EquipmentService {
         }
     }
 
-    public void insertDataToEquipSensorData(Connection conn) throws SQLException {
+    public void insertDataToEquipSensorData(Connection conn, EquipmentSensorData data) throws SQLException {
         String dbName = "equipment_sensor_data";
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         try {
-            String query = String.format("INSERT INTO " + dbName +
-                            " VALUES(" + "%d, '%s', '%s', %d, '%s', '%s', %b)",
-                    1, "drone1", "CPU temperature", 90, "°C", "Перевищення межі", false, timestamp);
+            String status = "Перевищення межі";
+            boolean isEventGenerated = false;
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-//                    "id SERIAL PRIMARY KEY," +
-//                    "equipment_id VARCHAR(50) NOT NULL," +
-//                    "sensor_type VARCHAR(50) NOT NULL," +
-//                    "value NUMERIC(10, 2) NOT NULL," +
-//                    "unit VARCHAR(20)," +
-//                    "status VARCHAR(20)," +
-//                    "event_generated BOOLEAN DEFAULT FALSE," +
-//                    "created_at TIMESTAMP DEFAULT NOW())");
+            String query = "INSERT INTO " + dbName +
+                    " (equipment_id, sensor_type, value, unit, status, event_generated, created_at) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(query);
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setString(1, data.getEquipmentId());
+                pstmt.setString(2, data.getSensorType());
+                pstmt.setDouble(3, data.getValue());
+                pstmt.setString(4, data.getUnit());
+                pstmt.setString(5, status);
+                pstmt.setBoolean(6, isEventGenerated);
+                pstmt.setTimestamp(7, timestamp);
+
+                System.out.println(pstmt.toString());
+                pstmt.executeUpdate();
+            }
             System.out.println("Inserted equipment sensor data.");
 
         } catch (Exception e) {
