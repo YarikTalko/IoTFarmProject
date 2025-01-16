@@ -1,7 +1,6 @@
 package com.iotfarmproject.iotfarmproject.equipment_management.service;
 
 import com.iotfarmproject.iotfarmproject.equipment_management.model.EquipmentSensorData;
-import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;

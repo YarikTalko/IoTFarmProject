@@ -5,15 +5,10 @@ import lombok.Data;
 @Data
 public class EquipmentSensorData {
 
-//    private int id;
     private String equipmentId;
     private String sensorType;
     private double value;
     private String unit;
-
-//    public int getId() {
-//        return id;
-//    }
 
     public String getEquipmentId() {
         return equipmentId;
