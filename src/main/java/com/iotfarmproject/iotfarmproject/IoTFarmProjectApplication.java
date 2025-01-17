@@ -1,6 +1,7 @@
 package com.iotfarmproject.iotfarmproject;
 
 import com.iotfarmproject.iotfarmproject.equipment_management.service.EquipmentService;
+import com.iotfarmproject.iotfarmproject.resource_management.service.ResourceService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -17,6 +18,10 @@ public class IoTFarmProjectApplication {
 //        Connection conn = equipmentService.connect();
 //        equipmentService.createTables(conn);
 //        equipmentService.insertDataToEquipSensorData(conn);
+
+//        ResourceService resourceService = new ResourceService();
+//        Connection conn = resourceService.connect();
+//        resourceService.createTable(conn);
     }
 
 }

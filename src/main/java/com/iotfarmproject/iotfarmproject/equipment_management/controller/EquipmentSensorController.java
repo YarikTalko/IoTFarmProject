@@ -24,7 +24,7 @@ public class EquipmentSensorController {
     @PostMapping("/publish")
     public ResponseEntity<String> sendJsonMessage(@RequestBody EquipmentSensorData data) throws SQLException {
         Connection conn = new EquipmentService().connect();
-        equipmentService.insertDataToEquipSensorData(conn, data);
+        equipmentService.insertData(conn, data);
         return ResponseEntity.ok("Json message sent to PostgreSQL");
     }
 }

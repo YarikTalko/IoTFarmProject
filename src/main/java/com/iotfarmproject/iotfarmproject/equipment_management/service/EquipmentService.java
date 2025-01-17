@@ -3,7 +3,6 @@ package com.iotfarmproject.iotfarmproject.equipment_management.service;
 import com.iotfarmproject.iotfarmproject.equipment_management.model.EquipmentSensorData;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 
 @Service
@@ -16,7 +15,7 @@ public class EquipmentService {
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/equipment_manager",
                     "user", "user");
             if (conn != null) {
-                System.out.println("Connected to PostgreSQL database");
+                System.out.println("Connected to PostgreSQL database (Equipment)");
             }
         } catch (Exception e) {
             System.out.println("PostgreSQL connection error: " + e);
@@ -59,8 +58,8 @@ public class EquipmentService {
         }
     }
 
-    public void insertDataToEquipSensorData(Connection conn, EquipmentSensorData data) throws SQLException {
-        String dbName = "equipment_sensor_data";
+    public void insertData(Connection conn, EquipmentSensorData data) throws SQLException {
+        String tableName = "equipment_sensor_data";
 
         try {
             String status; // = "Перевищення межі";
@@ -72,7 +71,7 @@ public class EquipmentService {
             status = dataCheckResult[0];
             isEventGenerated = Boolean.parseBoolean(dataCheckResult[1]);
 
-            String query = "INSERT INTO " + dbName +
+            String query = "INSERT INTO " + tableName +
                     " (equipment_id, sensor_type, value, unit, status, event_generated, created_at) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
