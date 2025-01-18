@@ -1,4 +1,4 @@
-package com.iotfarmproject.iotfarmproject.irrigation_control.service;
+package com.iotfarmproject.iotfarmproject.irrigation_management.service;
 
 import com.iotfarmproject.iotfarmproject.irrigation_sensor_monitoring.model.IrrigationSensorData;
 import org.slf4j.Logger;
@@ -11,7 +11,7 @@ public class IrrigationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IrrigationService.class);
 
-    @RabbitListener(queues = "${rabbitmq.sensors.queue.json.name}")
+    @RabbitListener(queues = "${rabbitmq.sensors.queue.name}")
     public void consumeJsonMessage(IrrigationSensorData irrigationSensorData) {
         LOGGER.info(String.format("Received JSON Message (RL) -> %s; %.2f; %.2f; %s.",
                 irrigationSensorData.getSensorId(), irrigationSensorData.getTemperature(),

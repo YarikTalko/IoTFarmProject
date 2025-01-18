@@ -1,12 +1,34 @@
 package com.iotfarmproject.iotfarmproject.equipment_sensor_monitoring.service;
 
+import com.iotfarmproject.iotfarmproject.equipment_management.model.EquipmentFaultData;
 import com.iotfarmproject.iotfarmproject.equipment_sensor_monitoring.model.EquipmentSensorData;
+import com.iotfarmproject.iotfarmproject.irrigation_sensor_monitoring.service.IrrigationSensorService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
 
 @Service
 public class EquipmentSensorService {
+
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange;
+
+    @Value("${rabbitmq.equipment.routing_key.name}")
+    private String routingKey;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(IrrigationSensorService.class);
+
+    private final RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    public EquipmentSensorService(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
 
     public Connection connect() {
         Connection conn = null;
@@ -95,56 +117,35 @@ public class EquipmentSensorService {
     }
 
     private String[] dataCheck(Connection conn, EquipmentSensorData data) throws SQLException {
-        String tableName = "equipment_tasks";
-        String equipment_status = "Normal";
+        String status = "Normal";
         boolean isEventGenerated = false;
 
-        try {
-            String fault_code = "", fault_description = "";
-            String assigned_to = "", status = "", priority = "";
-            Timestamp created_at, updated_at;
+        EquipmentFaultData faultData = new EquipmentFaultData();
 
-            switch (data.getSensorType()) {
-                case "CPU Temperature":
-                    if (data.getValue() > 85 || data.getValue() < 50) {
-                        fault_code = "00001a";
-                        fault_description = "The processor temperature has exceeded the allowable limits.";
-                        priority = "Medium";
-                        equipment_status = "Out of limits";
-                    }
-                    break;
-            }
-
-            if (!fault_code.equals("")) {
-                isEventGenerated = true;
-                status = "Pending";
-                created_at = new Timestamp(System.currentTimeMillis());
-                updated_at = created_at;
-
-                String query = "INSERT INTO " + tableName +
-                        " (equipment_id, fault_code, fault_description, assigned_to, status, priority, " +
-                        "created_at, updated_at) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-                try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-                    pstmt.setString(1, data.getEquipmentId());
-                    pstmt.setString(2, fault_code);
-                    pstmt.setString(3, fault_description);
-                    pstmt.setString(4, assigned_to);
-                    pstmt.setString(5, status);
-                    pstmt.setString(6, priority);
-                    pstmt.setTimestamp(7, created_at);
-                    pstmt.setTimestamp(8, updated_at);
-
-                    System.out.println(pstmt);
-                    pstmt.executeUpdate();
+        switch (data.getSensorType()) {
+            case "CPU Temperature":
+                if (data.getValue() > 85 || data.getValue() < 50) {
+                    faultData.setCode("00001a");
+                    faultData.setDescription("The processor temperature has exceeded the allowable limits.");
+                    faultData.setPriority("Medium");
+                    status = "Out of limits";
                 }
-                System.out.println("Inserted equipment tasks data.");
-            }
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
-            equipment_status = "Error";
+                break;
         }
-        return new String[]{equipment_status, Boolean.toString(isEventGenerated)};
+
+        if (!status.equals("Normal")) {
+            isEventGenerated = true;
+            faultData.setEquipmentId(data.getEquipmentId());
+            sendMessage(faultData);
+        }
+
+        return new String[]{status, Boolean.toString(isEventGenerated)};
+    }
+
+    private void sendMessage(EquipmentFaultData data) {
+        LOGGER.info(String.format("Message sent -> %s; %s; %s; %s.",
+                data.getEquipmentId(), data.getCode(),
+                data.getDescription(), data.getPriority()));
+        rabbitTemplate.convertAndSend(exchange, routingKey, data);
     }
 }

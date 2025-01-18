@@ -18,10 +18,10 @@ import java.time.temporal.ChronoUnit;
 @Service
 public class IrrigationSensorService {
 
-    @Value("${rabbitmq.sensors.exchange.name}")
+    @Value("${rabbitmq.exchange.name}")
     private String exchange;
 
-    @Value("${rabbitmq.sensors.json.routing_key}")
+    @Value("${rabbitmq.sensors.routing_key.name}")
     private String routingKey;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IrrigationSensorService.class);
@@ -35,14 +35,14 @@ public class IrrigationSensorService {
         this.writeApi = influxDBClient.getWriteApiBlocking();
     }
 
-    public void SendJsonMessage(IrrigationSensorData irrigationSensorData) {
+    public void sendMessage(IrrigationSensorData irrigationSensorData) {
         LOGGER.info(String.format("Json message sent -> %s; %.2f; %.2f; %s.",
                 irrigationSensorData.getSensorId(), irrigationSensorData.getTemperature(),
                 irrigationSensorData.getHumidity(), irrigationSensorData.getTimestamp().toString()));
         rabbitTemplate.convertAndSend(exchange, routingKey, irrigationSensorData);
     }
 
-    public void SendDataToInfluxDB(IrrigationSensorData irrigationSensorData) {
+    public void sendDataToInfluxDB(IrrigationSensorData irrigationSensorData) {
         Point point = Point.measurement("sensors_data")
                 .addTag("sensor_id", irrigationSensorData.getSensorId())
                 .addField("temperature", irrigationSensorData.getTemperature())

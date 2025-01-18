@@ -19,8 +19,8 @@ public class IrrigationSensorController {
     @PostMapping("/publish")
     public ResponseEntity<String> sendJsonMessage(@RequestBody IrrigationSensorData irrigationSensorData) {
         irrigationSensorData.setTimestamp(LocalDateTime.now());
-        irrigationSensorService.SendJsonMessage(irrigationSensorData);
-        irrigationSensorService.SendDataToInfluxDB(irrigationSensorData);
+        irrigationSensorService.sendMessage(irrigationSensorData);
+        irrigationSensorService.sendDataToInfluxDB(irrigationSensorData);
         return ResponseEntity.ok("Json message sent to RabbitMQ...");
     }
 }

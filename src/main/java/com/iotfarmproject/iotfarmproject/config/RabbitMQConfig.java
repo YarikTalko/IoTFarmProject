@@ -11,18 +11,29 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    @Value("${rabbitmq.sensors.queue.json.name}")
-    private String jsonQueue;
+    @Value("${rabbitmq.sensors.queue.name}")
+    private String sensorsQueue;
 
-    @Value("${rabbitmq.sensors.exchange.name}")
+    @Value("${rabbitmq.equipment.queue.name}")
+    private String equipmentQueue;
+
+    @Value("${rabbitmq.exchange.name}")
     private String exchange;
 
-    @Value("${rabbitmq.sensors.json.routing_key}")
-    private String routingJsonKey;
+    @Value("${rabbitmq.sensors.routing_key.name}")
+    private String sensorsRoutingKey;
+
+    @Value("${rabbitmq.equipment.routing_key.name}")
+    private String equipmentRoutingKey;
 
     @Bean
-    public Queue sensorDataJsonQueue() {
-        return new Queue(jsonQueue);
+    public Queue sensorDataQueue() {
+        return new Queue(sensorsQueue);
+    }
+
+    @Bean
+    public Queue equipmentQueue() {
+        return new Queue(equipmentQueue);
     }
 
     @Bean
@@ -31,11 +42,19 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Binding jsonBinding() {
+    public Binding sensorsBinding() {
         return BindingBuilder
-                .bind(sensorDataJsonQueue())
+                .bind(sensorDataQueue())
                 .to(exchange())
-                .with(routingJsonKey);
+                .with(sensorsRoutingKey);
+    }
+
+    @Bean
+    public Binding equipmentBinding() {
+        return BindingBuilder
+                .bind(equipmentQueue())
+                .to(exchange())
+                .with(equipmentRoutingKey);
     }
 
     @Bean
