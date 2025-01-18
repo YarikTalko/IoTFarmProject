@@ -1,4 +1,4 @@
-package com.iotfarmproject.iotfarmproject.irrigation_control.model;
+package com.iotfarmproject.iotfarmproject.irrigation_sensor_monitoring.model;
 
 import lombok.Data;
 

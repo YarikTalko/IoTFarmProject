@@ -1,6 +1,6 @@
-package com.iotfarmproject.iotfarmproject.resource_management.service;
+package com.iotfarmproject.iotfarmproject.resource_sensor_monitoring.service;
 
-import com.iotfarmproject.iotfarmproject.resource_management.model.ResourceSensorData;
+import com.iotfarmproject.iotfarmproject.resource_sensor_monitoring.model.ResourceSensorData;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class ResourceService {
+public class ResourceSensorService {
 
     private final Map<String, Object> threshold;
 
-    public ResourceService() {
+    public ResourceSensorService() {
         threshold = new HashMap<>();
         threshold.put("Tractor Fuel", 10);
         threshold.put("Oil", 5);

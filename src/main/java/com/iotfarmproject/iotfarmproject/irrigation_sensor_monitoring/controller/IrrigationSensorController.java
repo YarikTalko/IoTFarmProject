@@ -1,7 +1,7 @@
-package com.iotfarmproject.iotfarmproject.irrigation_control.controller;
+package com.iotfarmproject.iotfarmproject.irrigation_sensor_monitoring.controller;
 
-import com.iotfarmproject.iotfarmproject.irrigation_control.model.IrrigationSensorData;
-import com.iotfarmproject.iotfarmproject.irrigation_control.service.IrrigationSensorService;
+import com.iotfarmproject.iotfarmproject.irrigation_sensor_monitoring.model.IrrigationSensorData;
+import com.iotfarmproject.iotfarmproject.irrigation_sensor_monitoring.service.IrrigationSensorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;

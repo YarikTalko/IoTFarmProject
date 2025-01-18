@@ -1,11 +1,8 @@
 package com.iotfarmproject.iotfarmproject;
 
-import com.iotfarmproject.iotfarmproject.equipment_management.service.EquipmentService;
-import com.iotfarmproject.iotfarmproject.resource_management.service.ResourceService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 @SpringBootApplication

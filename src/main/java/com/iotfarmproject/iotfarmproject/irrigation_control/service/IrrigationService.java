@@ -1,6 +1,6 @@
 package com.iotfarmproject.iotfarmproject.irrigation_control.service;
 
-import com.iotfarmproject.iotfarmproject.irrigation_control.model.IrrigationSensorData;
+import com.iotfarmproject.iotfarmproject.irrigation_sensor_monitoring.model.IrrigationSensorData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

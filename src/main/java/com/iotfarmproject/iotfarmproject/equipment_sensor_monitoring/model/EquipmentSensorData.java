@@ -1,4 +1,4 @@
-package com.iotfarmproject.iotfarmproject.equipment_management.model;
+package com.iotfarmproject.iotfarmproject.equipment_sensor_monitoring.model;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.iotfarmproject.iotfarmproject.resource_management.model;
+package com.iotfarmproject.iotfarmproject.resource_sensor_monitoring.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

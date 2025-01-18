@@ -1,10 +1,10 @@
-package com.iotfarmproject.iotfarmproject.irrigation_control.service;
+package com.iotfarmproject.iotfarmproject.irrigation_sensor_monitoring.service;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.domain.WritePrecision;
 import com.influxdb.client.write.Point;
 import com.influxdb.client.WriteApiBlocking;
-import com.iotfarmproject.iotfarmproject.irrigation_control.model.IrrigationSensorData;
+import com.iotfarmproject.iotfarmproject.irrigation_sensor_monitoring.model.IrrigationSensorData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
-package com.iotfarmproject.iotfarmproject.equipment_management.controller;
+package com.iotfarmproject.iotfarmproject.equipment_sensor_monitoring.controller;
 
-import com.iotfarmproject.iotfarmproject.equipment_management.model.EquipmentSensorData;
-import com.iotfarmproject.iotfarmproject.equipment_management.service.EquipmentService;
+import com.iotfarmproject.iotfarmproject.equipment_sensor_monitoring.model.EquipmentSensorData;
+import com.iotfarmproject.iotfarmproject.equipment_sensor_monitoring.service.EquipmentSensorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,16 +15,16 @@ import java.sql.SQLException;
 @RequestMapping("/api/equipment")
 public class EquipmentSensorController {
 
-    private final EquipmentService equipmentService;
+    private final EquipmentSensorService equipmentSensorService;
 
-    public EquipmentSensorController(EquipmentService equipmentService) {
-        this.equipmentService = equipmentService;
+    public EquipmentSensorController(EquipmentSensorService equipmentSensorService) {
+        this.equipmentSensorService = equipmentSensorService;
     }
 
     @PostMapping("/publish")
     public ResponseEntity<String> sendJsonMessage(@RequestBody EquipmentSensorData data) throws SQLException {
-        Connection conn = new EquipmentService().connect();
-        equipmentService.insertData(conn, data);
+        Connection conn = new EquipmentSensorService().connect();
+        equipmentSensorService.insertData(conn, data);
         return ResponseEntity.ok("Json message sent to PostgreSQL");
     }
 }
