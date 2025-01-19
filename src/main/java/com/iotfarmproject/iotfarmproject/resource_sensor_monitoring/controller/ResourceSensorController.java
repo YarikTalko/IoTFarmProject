@@ -1,5 +1,6 @@
 package com.iotfarmproject.iotfarmproject.resource_sensor_monitoring.controller;
 
+import com.iotfarmproject.iotfarmproject.config.PostgreSQLConfig;
 import com.iotfarmproject.iotfarmproject.resource_sensor_monitoring.model.ResourceSensorData;
 import com.iotfarmproject.iotfarmproject.resource_sensor_monitoring.service.ResourceSensorService;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class ResourceSensorController {
     @PostMapping("/publish")
     public ResponseEntity<String> sendJsonMessage(@RequestBody ResourceSensorData data) throws SQLException {
         System.out.println("Received data: " + data);
-        Connection conn = new ResourceSensorService().connect();
+        Connection conn = PostgreSQLConfig.connect("resource_manager");
         resourceSensorService.insertData(conn, data);
         return ResponseEntity.ok("Json message sent to PostgreSQL");
     }

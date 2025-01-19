@@ -20,21 +20,6 @@ public class ResourceSensorService {
         threshold.put("Fertilizers", 50);
     }
 
-    public Connection connect() {
-        Connection conn = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/resource_manager",
-                    "user", "user");
-            if (conn != null) {
-                System.out.println("Connected to PostgreSQL database (Resource)");
-            }
-        } catch (Exception e) {
-            System.out.println("PostgreSQL connection error: " + e);
-        }
-        return conn;
-    }
-
     public void createTable(Connection conn) throws SQLException {
         Statement stmt;
 
