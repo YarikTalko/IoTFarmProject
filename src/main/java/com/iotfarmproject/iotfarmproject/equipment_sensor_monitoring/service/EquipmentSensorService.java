@@ -30,21 +30,6 @@ public class EquipmentSensorService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public Connection connect() {
-        Connection conn = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/equipment_manager",
-                    "user", "user");
-            if (conn != null) {
-                System.out.println("Connected to PostgreSQL database (Equipment)");
-            }
-        } catch (Exception e) {
-            System.out.println("PostgreSQL connection error: " + e);
-        }
-        return conn;
-    }
-
     public void createTables(Connection conn) throws SQLException {
         Statement stmt;
 
@@ -89,7 +74,7 @@ public class EquipmentSensorService {
             String[] dataCheckResult;
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-            dataCheckResult = dataCheck(conn, data);
+            dataCheckResult = dataCheck(data);
             status = dataCheckResult[0];
             isEventGenerated = Boolean.parseBoolean(dataCheckResult[1]);
 
@@ -116,7 +101,7 @@ public class EquipmentSensorService {
         }
     }
 
-    private String[] dataCheck(Connection conn, EquipmentSensorData data) throws SQLException {
+    private String[] dataCheck(EquipmentSensorData data) throws SQLException {
         String status = "Normal";
         boolean isEventGenerated = false;
 

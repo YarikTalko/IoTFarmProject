@@ -1,5 +1,6 @@
 package com.iotfarmproject.iotfarmproject.equipment_management.service;
 
+import com.iotfarmproject.iotfarmproject.config.PostgreSQLConfig;
 import com.iotfarmproject.iotfarmproject.equipment_management.model.EquipmentFaultData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,16 +17,16 @@ public class EquipmentService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EquipmentService.class);
 
-    //// TODO: Add Inserting Error Data
-
     @RabbitListener(queues = "${rabbitmq.equipment.queue.name}")
-    public void consumeMessage(EquipmentFaultData data) {
+    public void consumeMessage(EquipmentFaultData data) throws SQLException {
         LOGGER.info(String.format("Received message (EM) -> %s; %s; %s; %s.",
                 data.getEquipmentId(), data.getCode(),
                 data.getDescription(), data.getPriority()));
+        Connection conn = PostgreSQLConfig.connect("equipment_manager");
+        insertFaultData(conn, data);
     }
 
-    private void insertErrorData(Connection conn, EquipmentFaultData data) throws SQLException {
+    private void insertFaultData(Connection conn, EquipmentFaultData data) throws SQLException {
         String tableName = "equipment_tasks";
 
         try {
