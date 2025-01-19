@@ -2,7 +2,6 @@ package com.iotfarmproject.iotfarmproject.equipment_sensor_monitoring.service;
 
 import com.iotfarmproject.iotfarmproject.equipment_management.model.EquipmentFaultData;
 import com.iotfarmproject.iotfarmproject.equipment_sensor_monitoring.model.EquipmentSensorData;
-import com.iotfarmproject.iotfarmproject.irrigation_sensor_monitoring.service.IrrigationSensorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

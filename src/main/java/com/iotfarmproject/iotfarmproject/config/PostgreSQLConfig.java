@@ -13,7 +13,7 @@ public class PostgreSQLConfig {
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + dbName,
                     "user", "user");
             if (conn != null) {
-                System.out.println("Connected to PostgreSQL database (Equipment)");
+                System.out.println("Connected to PostgreSQL database (" + dbName + ")");
             }
         } catch (Exception e) {
             System.out.println("PostgreSQL connection error: " + e);

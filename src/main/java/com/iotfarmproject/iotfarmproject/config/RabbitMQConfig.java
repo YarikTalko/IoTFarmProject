@@ -17,6 +17,9 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.equipment.queue.name}")
     private String equipmentQueue;
 
+    @Value("${rabbitmq.resource.queue.name}")
+    private String resourceQueue;
+
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
 
@@ -26,6 +29,9 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.equipment.routing_key.name}")
     private String equipmentRoutingKey;
 
+    @Value("${rabbitmq.resource.routing_key.name}")
+    private String resourceRoutingKey;
+
     @Bean
     public Queue sensorDataQueue() {
         return new Queue(sensorsQueue);
@@ -34,6 +40,11 @@ public class RabbitMQConfig {
     @Bean
     public Queue equipmentQueue() {
         return new Queue(equipmentQueue);
+    }
+
+    @Bean
+    public Queue resourceQueue() {
+        return new Queue(resourceQueue);
     }
 
     @Bean
@@ -55,6 +66,14 @@ public class RabbitMQConfig {
                 .bind(equipmentQueue())
                 .to(exchange())
                 .with(equipmentRoutingKey);
+    }
+
+    @Bean
+    public Binding resourceBinding() {
+        return BindingBuilder
+                .bind(resourceQueue())
+                .to(exchange())
+                .with(resourceRoutingKey);
     }
 
     @Bean
