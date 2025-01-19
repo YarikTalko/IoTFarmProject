@@ -21,7 +21,7 @@ public class EquipmentSensorService {
     @Value("${rabbitmq.equipment.routing_key.name}")
     private String routingKey;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IrrigationSensorService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EquipmentSensorService.class);
 
     private final RabbitTemplate rabbitTemplate;
 

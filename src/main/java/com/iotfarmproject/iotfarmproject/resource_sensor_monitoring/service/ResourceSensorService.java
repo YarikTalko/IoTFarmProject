@@ -20,7 +20,7 @@ public class ResourceSensorService {
         threshold.put("Fertilizers", 50);
     }
 
-    public void createTable(Connection conn) throws SQLException {
+    public void createTables(Connection conn) throws SQLException {
         Statement stmt;
 
         try {
@@ -33,9 +33,21 @@ public class ResourceSensorService {
                     "alert_generated BOOLEAN DEFAULT FALSE," +
                     "created_at TIMESTAMP DEFAULT NOW())");
 
+            String query2 = String.format("CREATE TABLE IF NOT EXISTS " + "resource_tasks" + " (" +
+                    "id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY," +
+                    "resource_type VARCHAR(50) NOT NULL," +
+                    "current_level NUMERIC(10, 2) NOT NULL," +
+                    "threshold_level NUMERIC(10, 2)," +
+                    "status VARCHAR(50) NOT NULL," +
+                    "priority VARCHAR(50) NOT NULL," +
+                    "created_at TIMESTAMP DEFAULT NOW()," +
+                    "updated_at TIMESTAMP DEFAULT NOW())");
+
             stmt = conn.createStatement();
             stmt.executeUpdate(query1);
             System.out.println("Created (if not exist) table resource_monitoring");
+            stmt.executeUpdate(query2);
+            System.out.println("Created (if not exist) table resource_tasks");
         } catch (Exception e) {
             System.out.println(e);
         }

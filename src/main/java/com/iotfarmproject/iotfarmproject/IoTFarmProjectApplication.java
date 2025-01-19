@@ -1,8 +1,11 @@
 package com.iotfarmproject.iotfarmproject;
 
+import com.iotfarmproject.iotfarmproject.config.PostgreSQLConfig;
+import com.iotfarmproject.iotfarmproject.resource_sensor_monitoring.service.ResourceSensorService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 @SpringBootApplication
@@ -16,9 +19,9 @@ public class IoTFarmProjectApplication {
 //        equipmentService.createTables(conn);
 //        equipmentService.insertDataToEquipSensorData(conn);
 
-//        ResourceService resourceService = new ResourceService();
-//        Connection conn = resourceService.connect();
-//        resourceService.createTable(conn);
+//        ResourceSensorService resourceSensorService = new ResourceSensorService();
+//        Connection conn = PostgreSQLConfig.connect("resource_manager");
+//        resourceSensorService.createTables(conn);
     }
 
 }
