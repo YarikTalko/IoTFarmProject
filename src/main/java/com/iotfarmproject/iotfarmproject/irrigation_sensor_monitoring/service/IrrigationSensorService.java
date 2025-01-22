@@ -35,7 +35,7 @@ public class IrrigationSensorService {
         this.writeApi = influxDBClient.getWriteApiBlocking();
     }
 
-    public void sendMessage(IrrigationSensorData irrigationSensorData) {
+    public void sendJsonMessage(IrrigationSensorData irrigationSensorData) {
         LOGGER.info(String.format("Json message sent -> %s; %.2f; %.2f; %s.",
                 irrigationSensorData.getSensorId(), irrigationSensorData.getTemperature(),
                 irrigationSensorData.getHumidity(), irrigationSensorData.getTimestamp().toString()));

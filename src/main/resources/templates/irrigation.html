@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IoT Farm/Irrigation</title>
+    <link rel="stylesheet" href="buttonstyle.css">
+    <link rel="stylesheet" href="tablestyle.css">
+</head>
+<body>
+
+<a href="index.html"><button class="button-1" role="button">Back</button></a>
+<h1>Temperature</h1>
+<div id="temperature"></div>
+<h1>Humidity</h1>
+<div id="humidity"></div>
+
+<script>
+    async function loadTemperature() {
+        try {
+            const response = await fetch('http://localhost:3012/api/temperature');
+            const data = await response.json();
+
+            let table = "<table>";
+            table += `
+                    <tr>
+                        <th>Value</th>
+                        <th>Time</th>
+                    </tr>
+                `;
+
+            data.forEach(item => {
+                table += `
+                        <tr>
+                            <td>${item.value}</td>
+                            <td>${new Date(item.time).toLocaleString()}</td>
+                        </tr>
+                    `;
+            });
+
+            table += "</table>";
+            document.getElementById("temperature").innerHTML = table;
+        } catch (error) {
+            console.error("Error loading table:", error);
+            document.getElementById("temperature").innerHTML = `<p>Error loading data: ${error.message}</p>`;
+        }
+    }
+</script>
+
+<script>
+    async function loadHumidity() {
+        try {
+            const response = await fetch('http://localhost:3012/api/humidity');
+            const data = await response.json();
+
+            let table = "<table>";
+            table += `
+                    <tr>
+                        <th>Value</th>
+                        <th>Time</th>
+                    </tr>
+                `;
+
+            data.forEach(item => {
+                table += `
+                        <tr>
+                            <td>${item.value}</td>
+                            <td>${new Date(item.time).toLocaleString()}</td>
+                        </tr>
+                    `;
+            });
+
+            table += "</table>";
+            document.getElementById("humidity").innerHTML = table;
+        } catch (error) {
+            console.error("Error loading table:", error);
+            document.getElementById("humidity").innerHTML = `<p>Error loading data: ${error.message}</p>`;
+        }
+    }
+</script>
+
+<script>
+    window.addEventListener("load", () => {
+        loadTemperature();
+        loadHumidity();
+    });
+</script>
+
+</body>
+</html>
