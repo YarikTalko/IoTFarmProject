@@ -63,5 +63,3 @@ app.listen(3012, () => {
     console.log("Server is running on http://localhost:3012");
 });
 
-app.close();
-
