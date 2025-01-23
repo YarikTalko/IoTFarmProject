@@ -1,6 +1,7 @@
-const express = require('express');
-const cors = require('cors');
-const {Client} = require('pg');
+import express from 'express';
+import cors from 'cors';
+import pkg from 'pg';
+const { Client } = pkg;
 
 const app = express();
 app.use(cors());
@@ -38,6 +39,37 @@ app.get('/api/equipment_tasks', (req, res) => {
         } else {
             res.json(result.rows);
         }
+    });
+});
+
+app.use(express.json()); // Для обробки JSON у запитах
+
+app.put('/api/equipment_tasks/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const { status, priority, assigned_to } = req.body;
+
+    if (!status || !priority || !assigned_to) {
+        return res.status(400).send("Status, priority, and assigned_to are required.");
+    }
+
+    const query = `
+        UPDATE equipment_tasks
+        SET status = $1, priority = $2, assigned_to = $3, updated_at = NOW()
+        WHERE id = $4
+            RETURNING *;
+    `;
+
+    client.query(query, [status, priority, assigned_to, id], (err, result) => {
+        if (err) {
+            console.error("Error updating equipment task:", err.message);
+            return res.status(500).send("Error updating equipment task: " + err.message);
+        }
+
+        if (result.rowCount === 0) {
+            return res.status(404).send("Equipment task not found.");
+        }
+
+        res.json(result.rows[0]);
     });
 });
 

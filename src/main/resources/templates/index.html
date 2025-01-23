@@ -16,6 +16,19 @@
 <a href="equipment.html"><button class="button-1" role="button">Equipment</button></a>
 <a href="irrigation.html"><button class="button-1" role="button">Irrigation</button></a>
 <a href="analytics.html"><button class="button-1" role="button">Analytics</button></a>
+<br>
+<button class="button-3" role="button" onclick="irrigationOn()">Irrigation ON</button>
+<button class="button-3" role="button" onclick="irrigationOff()" style="background-color: #A52A2A">Irrigation OFF</button>
+<p id="irrigation"></p>
 
+<script>
+    function irrigationOn() {
+        document.getElementById("irrigation").innerHTML = "Irrigation On";
+    }
+
+    function irrigationOff() {
+        document.getElementById("irrigation").innerHTML = "Irrigation Off";
+    }
+</script>
 </body>
 </html>

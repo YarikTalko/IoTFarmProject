@@ -3,10 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <title>IoT Farm/Analytics</title>
+    <link rel="stylesheet" href="buttonstyle.css">
+    <link rel="stylesheet" href="tablestyle.css">
 </head>
 <body>
 
-<h1>analytics</h1>
+<a href="index.html">
+    <button class="button-1" role="button">Back</button>
+</a>
+<h1>Analytics</h1>
+<h2>Choose data range:</h2>
+
+<form id="date-form">
+    <label for="start-date">Початок:</label>
+    <input type="date" id="start-date" name="start-date">
+    <label for="end-date">Кінець:</label>
+    <input type="date" id="end-date" name="end-date">
+    <input type="submit" value="Submit">
+</form>
+<p id="output1"></p>
+<p id="output2"></p>
+
+<script>
+    document.getElementById("date-form").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        var startDate = document.getElementById("start-date").value;
+        var endDate = document.getElementById("end-date").value;
+
+        if (new Date(startDate) > new Date(endDate)) {
+            document.getElementById("output").innerHTML = "Помилка: Початкова дата не може бути пізнішою за кінцеву дату.";
+        } else {
+            try {
+                const response = await fetch('http://localhost:3013/api/analytics', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({startDate, endDate}),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    outputText(data);
+                } else {
+                    console.error("Помилка з боку сервера:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Failed to fetch data:", error);
+            }
+        }
+    });
+
+    function outputText(data) {
+        let output1 = "<p>Температура:</p>";
+
+        let table = "<table>";
+        table += `
+                    <tr>
+                        <th>Value</th>
+                        <th>Time</th>
+                    </tr>
+                `;
+
+        data.temperatureData.forEach(item => {
+            table += `
+                        <tr>
+                            <td>${item.value}</td>
+                            <td>${new Date(item.time).toLocaleString()}</td>
+                        </tr>
+                    `;
+        });
+
+        output1 += table;
+
+        let output2 = "<p>Вологість:</p>";
+
+        table = "<table>";
+
+        table += `
+                    <tr>
+                        <th>Value</th>
+                        <th>Time</th>
+                    </tr>
+                `;
+
+        data.humidityData.forEach(item => {
+            table += `
+                        <tr>
+                            <td>${item.value}</td>
+                            <td>${new Date(item.time).toLocaleString()}</td>
+                        </tr>
+                    `;
+        });
+
+        output2 += table;
+
+        document.getElementById("output1").innerHTML = output1;
+        document.getElementById("output2").innerHTML = output2;
+    }
+</script>
 
 </body>
 </html>

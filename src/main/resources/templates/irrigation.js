@@ -1,10 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-const {InfluxDB} = require("@influxdata/influxdb-client");
-const {json} = require("express");
+import express from 'express';
+import cors from 'cors';
+import { InfluxDB } from '@influxdata/influxdb-client';
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 let url = "http://localhost:8086";
 let token = "k56HcUqpxgAkINETkcsqUkRG1Lv-4uWK6sVMqRy7_B2FTCMLwKfsGUa8vwSmuNrmdXfgR_7Ixq8e2IK27u_sHg==";

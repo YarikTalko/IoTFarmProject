@@ -17,6 +17,50 @@
 <h1>Resource Tasks Table</h1>
 <div id="resource_tasks"></div>
 
+<h1>Update Resource Task</h1>
+<form id="update-form">
+    <label for="id">ID:</label>
+    <input type="text" id="id" name="id" required><br><br>
+
+    <label for="status">New Status:</label>
+    <input type="text" id="status" name="status" required><br><br>
+
+    <label for="priority">New Priority:</label>
+    <input type="text" id="priority" name="priority" required><br><br>
+
+    <button type="submit">Update</button>
+</form>
+
+<script>
+    document.getElementById("update-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const id = document.getElementById("id").value;
+        const status = document.getElementById("status").value;
+        const priority = document.getElementById("priority").value;
+
+        try {
+            const response = await fetch(`http://localhost:3010/api/resource_tasks/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ status, priority }),
+            });
+
+            if (response.ok) {
+                alert("Task updated successfully!");
+            } else {
+                const errorData = await response.json();
+                alert("Error updating task: " + errorData.message);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Error updating task.");
+        }
+    });
+</script>
+
 <script>
     async function loadResourceMonitoring() {
         try {

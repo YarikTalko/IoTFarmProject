@@ -1,11 +1,12 @@
 {
   "name": "iotfarmproject",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"node src\\main\\resources\\templates\\resources.js\" \"node src\\main\\resources\\templates\\equipment.js\" \"node src\\main\\resources\\templates\\irrigation.js\""
+    "start": "concurrently \"node src\\main\\resources\\templates\\resources.js\" \"node src\\main\\resources\\templates\\equipment.js\" \"node src\\main\\resources\\templates\\irrigation.js\" \"node src\\main\\resources\\templates\\analytics.js\""
   },
   "repository": {
     "type": "git",
